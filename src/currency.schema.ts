@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Currency extends Document {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   currencyCode: string;
 
   @Prop({ required: true })

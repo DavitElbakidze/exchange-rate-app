@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Currency, CurrencySchema } from './currency.schema';
-import { CurrencyModule } from './currency/currency.module';
+import { ExchangeRateModule } from './exchange-rate/exchange-rate.module';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { CurrencyModule } from './currency/currency.module';
     MongooseModule.forFeature([
       { name: Currency.name, schema: CurrencySchema },
     ]),
-    CurrencyModule,
+    ExchangeRateModule,
   ],
   controllers: [AppController],
   providers: [AppService],
