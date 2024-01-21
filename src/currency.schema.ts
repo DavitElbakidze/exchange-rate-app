@@ -12,7 +12,7 @@ export class Currency extends Document {
   currencyName: string;
 
   @Prop({ required: true })
-  rate: number;
+  rateComparedToGel: number;
 
   @Prop({ required: true })
   date: Date;
