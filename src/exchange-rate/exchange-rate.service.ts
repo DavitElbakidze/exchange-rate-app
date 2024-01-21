@@ -17,12 +17,10 @@ export class ExchangeRateService implements OnModuleInit {
     await this.fetchAndStoreRates();
   }
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async fetchAndStoreRates() {
     try {
-      const response = await axios.get(
-        'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json/',
-      );
+      const response = await axios.get(process.env.API_URL);
       const exchangeRates = response.data[0].currencies;
 
       await Promise.all(
@@ -30,7 +28,7 @@ export class ExchangeRateService implements OnModuleInit {
           const currencyData: Partial<Currency> = {
             currencyCode: rate.code,
             currencyName: rate.name,
-            rate: rate.rate,
+            rateComparedToGel: rate.rate,
             date: new Date(rate.date),
           };
           await this.currencyModel.create(currencyData);
