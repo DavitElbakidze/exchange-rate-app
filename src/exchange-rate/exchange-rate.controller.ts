@@ -1,12 +1,15 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ExchangeRateService } from './exchange-rate.service';
+import { Currency } from 'src/currency.schema';
 
 @Controller('exchange-rate')
 export class ExchangeRateController {
   constructor(private readonly exchangeRateService: ExchangeRateService) {}
 
   @Get('by-code/:currencyCode')
-  async getExchangeRateByCode(@Param('currencyCode') currencyCode: string) {
+  async getExchangeRateByCode(
+    @Param('currencyCode') currencyCode: string,
+  ): Promise<Currency | { statusCode: number; message: string }> {
     try {
       const exchangeRate = await this.exchangeRateService.getRateByCode(
         currencyCode,
@@ -18,11 +21,11 @@ export class ExchangeRateController {
           message: `No exchange rate found for ${currencyCode}`,
         };
       }
-      return exchangeRate;
+      return exchangeRate as Currency;
     } catch (error) {
       return {
         statusCode: 500,
-        error: 'Something Went Wrong!',
+        message: 'Something Went Wrong!',
       };
     }
   }
@@ -31,7 +34,7 @@ export class ExchangeRateController {
   async getExchangeRateByDate(
     @Param('currencyCode') currencyCode: string,
     @Param('date') date: string,
-  ) {
+  ): Promise<Currency | { statusCode: number; message: string }> {
     try {
       const exchangeRate =
         await this.exchangeRateService.getExchangeRateByCurrencyAndDate(
@@ -45,17 +48,19 @@ export class ExchangeRateController {
           message: `No exchange rate found for ${currencyCode} on ${date}`,
         };
       }
-      return exchangeRate;
+      return exchangeRate as Currency;
     } catch (error) {
       return {
         statusCode: 500,
-        error: 'Something Went Wrong!',
+        message: 'Something Went Wrong!',
       };
     }
   }
 
   @Get('exchange-rates/by-date/:date')
-  async getAllExchangeRateByDate(@Param('date') date: string) {
+  async getAllExchangeRateByDate(
+    @Param('date') date: string,
+  ): Promise<Currency[] | { statusCode: number; message: string }> {
     try {
       const exchangeRates =
         await this.exchangeRateService.getAllExchangeRateByDate(new Date(date));
@@ -66,11 +71,11 @@ export class ExchangeRateController {
           message: `No exchange rates found on ${date}`,
         };
       }
-      return exchangeRates;
+      return exchangeRates as Currency[];
     } catch (error) {
       return {
         statusCode: 500,
-        error: 'Something Went Wrong!',
+        message: 'Something Went Wrong!',
       };
     }
   }
