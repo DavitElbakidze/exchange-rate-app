@@ -26,11 +26,49 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+**Exchange Rate Fetching Service:**
+
+- Daily fetches currency exchange rates from the [Georgian National Bank API](https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json/).
+- Stores the fetched data in a MongoDB database.
+
+**API Endpoint:**
+
+- Provides a RESTful API endpoint to retrieve exchange rates.
+
+- Accepts a currency code as a parameter and returns the corresponding exchange rate.
+  Get Exchange Rate by Code:
+  Endpoint: /exchange-rate/by-code/:currencyCode
+
+- Accepts a Date and currency code as a parameters and returns the exchange rate for the corresponding date and code.
+  Get Exchange Rate by Date:
+  Endpoint: /exchange-rate/by-date/:currencyCode/:date
+
+- Accepts a Date a parameter and returns the all exchange rates for the corresponding date.
+  Get All Exchange Rates by Date:
+  Endpoint: /exchange-rate/exchange-rates/by-date/:date
+
+- All rates are compared to GEL
+
+**Database Design:**
+
+- MongoDB is used to efficiently store and retrieve currency exchange rates.
+
 ## Installation
+
+1. Clone the repository:
+
+   ```bash
+   $ git clone https://github.com/DavitElbakidze/exchange-rate-app.git
+   $ cd exchange-rate-app
+   ```
+
+2. Install dependencies:
 
 ```bash
 $ npm install
 ```
+
+3. Create a .env file based on the provided .env.example.
 
 ## Running the app
 
