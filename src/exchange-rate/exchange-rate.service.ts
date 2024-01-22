@@ -17,7 +17,7 @@ export class ExchangeRateService implements OnModuleInit {
     await this.fetchAndStoreRates();
   }
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async fetchAndStoreRates() {
     try {
       const response = await axios.get(
@@ -41,7 +41,10 @@ export class ExchangeRateService implements OnModuleInit {
     }
   }
 
-  async getExchangeRateByCurrencyAndDate(currencyCode: string, date: string) {
+  async getExchangeRateByCurrencyAndDate(
+    currencyCode: string,
+    date: string,
+  ): Promise<Currency | { statusCode: number; message: string }> {
     try {
       const formattedDate = new Date(date);
       formattedDate.setUTCHours(0, 0, 0, 0);
@@ -67,12 +70,15 @@ export class ExchangeRateService implements OnModuleInit {
         `Error in getExchangeRateByCurrencyAndDate: ${error.message}`,
       );
       return {
-        error: `Error in getExchangeRateByCurrencyAndDate: ${error.message}`,
+        statusCode: 500,
+        message: `Error in getExchangeRateByCurrencyAndDate: ${error.message}`,
       };
     }
   }
 
-  async getRateByCode(currencyCode: string) {
+  async getRateByCode(
+    currencyCode: string,
+  ): Promise<Currency | { statusCode: number; message: string }> {
     try {
       const exchangeRate = await this.currencyModel
         .findOne({ currencyCode })
@@ -87,12 +93,15 @@ export class ExchangeRateService implements OnModuleInit {
     } catch (error) {
       this.logger.error(`Error in getRateByCode: ${error.message}`);
       return {
-        error: `Error in getRateByCode: ${error.message}`,
+        statusCode: 500,
+        message: `Error in getRateByCode: ${error.message}`,
       };
     }
   }
 
-  async getAllExchangeRateByDate(date?: Date) {
+  async getAllExchangeRateByDate(
+    date?: Date,
+  ): Promise<Currency[] | { statusCode: number; message: string }> {
     try {
       const formattedDate = new Date(date);
       formattedDate.setUTCHours(0, 0, 0, 0);
@@ -115,7 +124,8 @@ export class ExchangeRateService implements OnModuleInit {
     } catch (error) {
       this.logger.error(`Error in getAllExchangeRateByDate: ${error.message}`);
       return {
-        error: `Error in getAllExchangeRateByDate: ${error.message}`,
+        statusCode: 500,
+        message: `Error in getAllExchangeRateByDate: ${error.message}`,
       };
     }
   }
