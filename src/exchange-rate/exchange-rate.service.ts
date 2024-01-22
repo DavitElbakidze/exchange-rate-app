@@ -14,7 +14,15 @@ export class ExchangeRateService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    await this.fetchAndStoreRates();
+    try {
+      if (!process.env.API_URL) {
+        throw new Error('API_URL is not defined in the environment variables.');
+      }
+      await this.fetchAndStoreRates();
+    } catch (error) {
+      this.logger.error(`Error in onModuleInit: ${error.message}`);
+      throw error;
+    }
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
