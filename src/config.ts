@@ -1,2 +1,6 @@
 import { config } from 'dotenv';
-config();
+try {
+  config();
+} catch (error) {
+  throw error;
+}
